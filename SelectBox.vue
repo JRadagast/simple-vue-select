@@ -1,5 +1,5 @@
 <template>
-  	<div tabindex="0" ref="select" class="select-box" @click="openTextOptions()">
+  	<div tabindex="0" ref="select" class="select-box" :class="{'disabled': disabled }" @click="openTextOptions()">
         <div class="tipos-box-tipo" >
             <svg class="svg-icons" v-if="icons" >
                 <use :xlink:href="require('@/assets/img/icons/'+ getSVG() + '.svg')+'#layer'"></use>
@@ -36,6 +36,9 @@ export default {
       },
       editable: {
           default: false,
+      },
+      disabled:{
+          default: false,
       }
   },
   data() {
@@ -58,7 +61,7 @@ export default {
   },
   methods: {
         openTextOptions(){
-            if (this.itemsnum > 0){
+            if ( !this.disabled && this.itemsnum > 0){
                 this.optmenu = !this.optmenu;
             }
         },
@@ -72,8 +75,7 @@ export default {
                 return 'text-short';
             }
         },
-        getItem(){
-            console.log(this.selectedIndex, this.getDescription(this.items[this.selectedIndex]))
+        getItem(){            
             if ( this.selectedIndex >= 0){
                 return this.getDescription(this.items[this.selectedIndex]);
             } else if (!this.editable) {
@@ -90,7 +92,7 @@ export default {
             }
             return item.desc;
         }
-  }
+    }
 }
 
 </script>
@@ -173,6 +175,10 @@ export default {
     width: 100%;
     border: 1px solid #DDDDDD;
     color: $subtitle-border;
+
+    &.disabled{
+        background: #E3E3E3;
+    }
 
     > .tipos-box-tipo{
         justify-content: space-between;
